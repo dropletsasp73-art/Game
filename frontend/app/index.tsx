@@ -689,22 +689,24 @@ export default function EasyStreet() {
       return;
     }
     
-    // Next turn
-    nextTurn(updatedPlayers);
+    // Next turn - pass current player index explicitly to avoid stale state
+    nextTurn(playerIdx, updatedPlayers);
   };
 
-  const nextTurn = (playerList: Player[]) => {
-    const nextIdx = (currentPlayerIndex + 1) % playerList.length;
+  const nextTurn = (currentIdx: number, playerList: Player[]) => {
+    // Calculate next index from the passed current index, not from state
+    const nextIdx = (currentIdx + 1) % playerList.length;
     setCurrentPlayerIndex(nextIdx);
     
     if (nextIdx === 0) {
       setTurnCount(t => t + 1);
     }
     
-    // If next is AI, auto-play
+    // If next is AI, auto-play after delay
     if (playerList[nextIdx].isAI) {
       setTimeout(() => aiTurn(nextIdx, playerList), 1200);
     } else {
+      // Human's turn - zoom to them
       updateCameraForPlayer(nextIdx, playerList);
     }
   };

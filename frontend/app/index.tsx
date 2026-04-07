@@ -309,6 +309,9 @@ export default function EasyStreet() {
   const screenShake = useSharedValue(0);
   const flashColor = useRef<'positive' | 'negative'>('positive');
 
+  // Game processing lock - prevents race condition during AI turns
+  const isGameBusyRef = useRef(false);
+
   // Camera state
   const cameraScale = useSharedValue(1.5);
   const cameraX = useSharedValue(0);
